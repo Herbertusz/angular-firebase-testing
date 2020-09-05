@@ -1,0 +1,18 @@
+<div class="answers">
+
+  <h1>Kérdés:</h1>
+  <strong>{{ question.userName }}:</strong><br />
+  <p>
+    {{ question.text }}
+  </p>
+  <h1>Válaszok:</h1>
+  <ul>
+    <li *ngFor="let answer of answers">
+      <strong>{{ answer.userName }}:</strong><br />
+        <p>
+          {{ answer.text }}
+        </p>
+    </li>
+  </ul>
+
+</div>

@@ -1,0 +1,12 @@
+<div class="questions">
+  <h1>Kérdések:</h1>
+  <ul>
+    <li *ngFor="let question of questions">
+      <strong>{{ question.userName }}:</strong><br />
+      <p>
+        {{ question.text }}
+      </p>
+      <a routerLink="/question/{{ question.id }}">Válaszok >>></a>
+    </li>
+  </ul>
+</div>
