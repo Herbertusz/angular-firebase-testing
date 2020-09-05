@@ -30,7 +30,9 @@ export class AnswersComponent implements OnInit {
     this.route.params.subscribe(
       (params: Params) => {
         const questionId = params.id;
-        db.collection('questions').doc(questionId).get()
+        db.collection('questions')
+          .doc(questionId)
+          .get()
           .then((doc) => {
             this.question = doc.data();
             return this.service.getRef(this.question.user);

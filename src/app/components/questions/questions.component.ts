@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as firebase from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/auth';
@@ -16,16 +16,37 @@ import { DatabaseService } from '../../firebase.service';
 })
 export class QuestionsComponent implements OnInit {
 
+  private db: firebase.firestore.Firestore;
+  private firstLoad = true;
   public questions: any[] = [];
+  public form: FormGroup;
 
   constructor(
     private service: DatabaseService
   ) { }
 
   ngOnInit() {
-    const db = firebase.firestore();
+    this.form = new FormGroup({
+      title: new FormControl('', [Validators.required]),
+      question: new FormControl('', [Validators.required])
+    });
 
-    db.collection('questions').get()
+    this.db = firebase.firestore();
+
+    this.getQuestions();
+
+    this.db.collection('questions')
+      .onSnapshot((querySnapshot) => {
+        if (!this.firstLoad) {
+          this.getNewQuestions(querySnapshot);
+        }
+        this.firstLoad = false;
+      });
+  }
+
+  getQuestions(): Promise<void> {
+    return this.db.collection('questions')
+      .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           this.questions.push({
@@ -49,6 +70,53 @@ export class QuestionsComponent implements OnInit {
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  getNewQuestions(querySnapshot: firebase.firestore.QuerySnapshot) {
+     new Promise((resolve, reject) => {
+       querySnapshot.docChanges().forEach(
+         (change) => {
+           if (change.type === 'added') {
+             const newQuestion = {
+               id: change.doc.id,
+               ...change.doc.data()
+             } as any;
+             this.questions.push(newQuestion);
+             console.log('X');
+             resolve(this.service.getRef(newQuestion.user));
+           }
+         }
+       );
+     })
+     .then((user: firebase.firestore.DocumentData) => {
+       this.questions[this.questions.length - 1].userName = user.name;
+     })
+     .catch((error) => {
+       console.error(error);
+     });
+  }
+
+  postQuestion() {
+    if (this.form.valid) {
+      const values = this.form.value;
+      this.db.collection('questions')
+        .add({
+          user: this.db.doc('users/S2FFdGkDQP5fffTWKpft'),
+          title: values.title,
+          text: values.question,
+          answers: [],
+          created: firebase.firestore.Timestamp.fromDate(new Date())
+        })
+        .then(function(docRef) {
+          console.log('ID: ', docRef.id);
+        })
+        .catch(function(error) {
+          console.error(error);
+        });
+    } else {
+      console.log(this.form.controls.title.errors);
+      console.log(this.form.controls.question.errors);
+    }
   }
 
 }
