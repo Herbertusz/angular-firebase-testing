@@ -1,0 +1,22 @@
+li {
+  margin: 20px 0;
+}
+
+form {
+
+  input, textarea, button {
+    display: block;
+    margin: 10px 0;
+    width: 500px;
+  }
+
+  textarea {
+    height: 100px;
+    resize: vertical;
+  }
+
+  button {
+    width: 80px;
+  }
+
+}

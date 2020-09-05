@@ -4,9 +4,15 @@
     <li *ngFor="let question of questions">
       <strong>{{ question.userName }}:</strong><br />
       <p>
+        <strong>{{ question.title }}</strong><br />
         {{ question.text }}
       </p>
       <a routerLink="/question/{{ question.id }}">Válaszok >>></a>
     </li>
   </ul>
+  <form [formGroup]="form" (submit)="postQuestion()">
+    <input type="text" formControlName="title" placeholder="Tárgy" />
+    <textarea formControlName="question" placeholder="Új kérdés"></textarea>
+    <button type="submit">Küldés</button>
+  </form>
 </div>

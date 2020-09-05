@@ -27,7 +27,8 @@ export class AppComponent implements OnInit {
 
     const db = firebase.firestore();
 
-    db.collection('users').get()
+    db.collection('users')
+      .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           this.users.push(doc.data().name);

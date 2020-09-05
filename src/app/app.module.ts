@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { routes } from './app.routing';
@@ -16,7 +17,8 @@ import { AnswersComponent } from './components/answers/answers.component';
   ],
   imports: [
     RouterModule.forRoot(routes),
-    BrowserModule
+    BrowserModule,
+    ReactiveFormsModule
   ],
   providers: [
     DatabaseService
