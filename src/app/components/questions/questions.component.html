@@ -1,4 +1,5 @@
 <div class="questions">
+
   <h1>Kérdések:</h1>
   <ul>
     <li *ngFor="let question of questions">
@@ -10,9 +11,11 @@
       <a routerLink="/question/{{ question.id }}">Válaszok >>></a>
     </li>
   </ul>
+
   <form [formGroup]="form" (submit)="postQuestion()">
     <input type="text" formControlName="title" placeholder="Tárgy" />
     <textarea formControlName="question" placeholder="Új kérdés"></textarea>
     <button type="submit">Küldés</button>
   </form>
+
 </div>

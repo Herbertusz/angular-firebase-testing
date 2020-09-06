@@ -16,4 +16,9 @@
     </li>
   </ul>
 
+  <form [formGroup]="form" (submit)="postAnswer()">
+    <textarea formControlName="answer" placeholder="Új válasz"></textarea>
+    <button type="submit">Küldés</button>
+  </form>
+
 </div>

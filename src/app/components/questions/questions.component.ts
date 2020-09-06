@@ -44,8 +44,8 @@ export class QuestionsComponent implements OnInit {
       });
   }
 
-  getQuestions(): Promise<void> {
-    return this.db.collection('questions')
+  getQuestions() {
+    this.db.collection('questions')
       .orderBy('created', 'desc')
       .get()
       .then((querySnapshot) => {
