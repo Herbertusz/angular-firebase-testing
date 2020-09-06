@@ -46,6 +46,7 @@ export class QuestionsComponent implements OnInit {
 
   getQuestions(): Promise<void> {
     return this.db.collection('questions')
+      .orderBy('created', 'desc')
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -81,15 +82,14 @@ export class QuestionsComponent implements OnInit {
                id: change.doc.id,
                ...change.doc.data()
              } as any;
-             this.questions.push(newQuestion);
-             console.log('X');
+             this.questions.unshift(newQuestion);
              resolve(this.service.getRef(newQuestion.user));
            }
          }
        );
      })
      .then((user: firebase.firestore.DocumentData) => {
-       this.questions[this.questions.length - 1].userName = user.name;
+       this.questions[0].userName = user.name;
      })
      .catch((error) => {
        console.error(error);
@@ -107,10 +107,12 @@ export class QuestionsComponent implements OnInit {
           answers: [],
           created: firebase.firestore.Timestamp.fromDate(new Date())
         })
-        .then(function(docRef) {
+        .then((docRef) => {
           console.log('ID: ', docRef.id);
+          this.form.controls.title.setValue('');
+          this.form.controls.question.setValue('');
         })
-        .catch(function(error) {
+        .catch((error) => {
           console.error(error);
         });
     } else {
